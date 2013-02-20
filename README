@@ -1,0 +1,5 @@
+This app attempts to download and parse the pages of oeis.org to make it more readable on a mobile device.
+
+Currently there are many issues. It was made quickly within two days. Some of the issues include, incorrect labelling of "comments," "references," and "links" as not all sequeneces have comments, references and links.
+
+The app depends on JSOUP which has not been included in this repo.

@@ -136,7 +136,7 @@ public class OEIS extends Activity {
 		@Override
 		protected Void doInBackground(Void... arg0) {
 			try {
-				d = Jsoup.connect(webAddress).get();
+				d = Jsoup.connect(webAddress).timeout(0).get();
 				tables = d.select("center > table > tbody > tr > td"); //This sets table.get(0) to the element just above all the required data
 			} catch(SocketTimeoutException e) {
 				error = "<html><body style=\"color:#FFFFFF;background-color:#000000\">Sorry, there was a time out error. This could be an indication that the number of sequences that are trying to be obtained is very large. If it's possible, please try to refine the sequence and try again.</body></html>";

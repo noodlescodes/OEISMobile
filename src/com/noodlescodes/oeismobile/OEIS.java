@@ -1,5 +1,8 @@
 package com.noodlescodes.oeismobile;
 
+import java.io.IOException;
+import java.net.SocketTimeoutException;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -25,7 +28,7 @@ public class OEIS extends Activity {
 	Button search_button;
 	EditText search_text;
 	WebView webView;
-	String html, webAddress;
+	String html, webAddress, error;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +138,14 @@ public class OEIS extends Activity {
 			try {
 				d = Jsoup.connect(webAddress).get();
 				tables = d.select("center > table > tbody > tr > td"); //This sets table.get(0) to the element just above all the required data
+			} catch(SocketTimeoutException e) {
+				error = "<html><body style=\"color:#FFFFFF;background-color:#000000\">Sorry, there was a time out error. This could be an indication that the number of sequences that are trying to be obtained is very large. If it's possible, please try to refine the sequence and try again.</body></html>";
+				succeeded = false; //if the downloading failed, then it will throw an exception.
+			} catch(IOException e) {
+				error = "<html><body style=\"color:#FFFFFF;background-color:#000000\">Sorry, there was an IO error. Please try again soon.</body></html>";
+				succeeded = false; //if the downloading failed, then it will throw an exception.
 			} catch(Exception e) {
+				error = "<html><body style=\"color:#FFFFFF;background-color:#000000\">Sorry, something went wrong, please try again.</body></html>";
 				succeeded = false; //if the downloading failed, then it will throw an exception.
 			}
 			
@@ -151,7 +161,6 @@ public class OEIS extends Activity {
 			}
 			
 			if(!succeeded) { //downloading the page failed if !succeeded == true
-				String error = "<html><body style=\"color:#FFFFFF;background-color:#000000\">Sorry, downloading went wrong, please try again.</body></html>";
     			webView.loadData(error, "text/html", "UTF-8");
 			}
 			else {				
